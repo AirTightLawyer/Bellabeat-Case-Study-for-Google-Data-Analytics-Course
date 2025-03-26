@@ -58,13 +58,13 @@ library(ggtext)
 * Thirdly, I imported my datasets I got from Kaggle [here](https://www.kaggle.com/datasets/arashnic/fitbit]) 
 
 ```{r importing the data}
-Daily_Activity <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/dailyActivity_merged.csv")
-Sleep_in_Minutes <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/minuteSleep_merged.csv")
-Heartrate_in_seconds <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/heartrate_seconds_merged.csv")
-Hourly_Calories <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/hourlyCalories_merged.csv")
-Weight_LossLogs <-read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/weightLogInfo_merged.csv")
-Hourly_Steps <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/hourlySteps_merged.csv")
-Daily_Activity_4.12_5.12 <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_4.12.16-5.12.16/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv")
+Daily_Activity <- read.csv()
+Sleep_in_Minutes <- read.csv()
+Heartrate_in_seconds <- read.csv()
+Hourly_Calories <- read.csv()
+Weight_LossLogs <-read.csv()
+Hourly_Steps <- read.csv()
+Daily_Activity_4.12_5.12 <- read.csv()
 ```
 
 ### Checking the Data
