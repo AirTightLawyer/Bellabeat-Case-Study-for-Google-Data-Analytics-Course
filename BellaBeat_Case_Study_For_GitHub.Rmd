@@ -1,0 +1,256 @@
+---
+title: "Bellabeat Case Study"
+author: "Cole Bailey"
+date: "2025-03-25"
+output:
+  pdf_document: default
+---
+
+# Why Bellabeat?
+
+I chose to do the case study on Bellabeat for me first case study as I love fitness. I have been a long time enjoy-er of exercise since my mother put me in my first 5k when I was 12. Back then, the goal was to get me outside as I had become sedentary due to my additional love for video games (I spent thousands of hours in Destiny 1 in my youth). The first time she had me run I fell in love with it. Since that experience, I joined the high school Cross Country and Track team where my love for exercise blossomed. I made the state championships twice in my short 4 year stint with running, but when Covid hit in 2020 I made the switch to weightlifting. Again, it was like falling in love with a sport all over again. I loved the challenge of pushing myself to PR and the feeling of progression. My desire to learn more about lifting and the sport led me to minor in Kinesiology - with an emphasis in Exercise Science. For all of these years in these two different sports I have also been wearing a smart watch that has allowed me to track my miles, lifts, heart rates, sleep, and more so I can optimize my training. These passions are the reason I chose this case study - to learn more about the use of these smart devices and how they can be improved so exercise lovers like me can enjoy our sports more. 
+
+# Asking the Right Questions 
+
+The first thing I did for this study was to ask the right questions to set myself up to answer later after analysis. My questions are as follows 
+
+* What are some trends in smart device usage?
+* How can these trends apply to Bellabeat customers
+* How could these trends help influence Bellabeat marketing strategies?
+
+These questions guided my study and will be the key to the following research. I hope as you read you can see these in every step of the way and how each step pushes us closer to answering these pivotal questions.
+
+# Preparing my Data
+### Setting up Environment
+
+The next item on my agenda was to prepare the data to be cleaned, processed, and analyzed. To do this, I set up my environment as follows:
+
+* First things first, installing the relevant packages to perform data cleaning, processing, plotting, and statistical analysis.
+
+```{r setup, include=FALSE}
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
+```
+
+
+```{r install packages, message=FALSE, warning=FALSE}
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("readr")
+install.packages("tidyr")
+install.packages("stringr")
+install.packages("ggpubr")
+install.packages("ggtext")
+```
+
+* Secondly, After installing the packages, they must be loaded to be ready for use
+```{r load environment, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggpubr)
+library(ggtext)
+```
+
+* Thirdly, I imported my datasets I got from Kaggle [here](https://www.kaggle.com/datasets/arashnic/fitbit]) 
+
+```{r importing the data}
+Daily_Activity <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/dailyActivity_merged.csv")
+Sleep_in_Minutes <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/minuteSleep_merged.csv")
+Heartrate_in_seconds <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/heartrate_seconds_merged.csv")
+Hourly_Calories <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/hourlyCalories_merged.csv")
+Weight_LossLogs <-read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/weightLogInfo_merged.csv")
+Hourly_Steps <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_3.12.16-4.11.16/Fitabase Data 3.12.16-4.11.16/hourlySteps_merged.csv")
+Daily_Activity_4.12_5.12 <- read.csv("C:/Users/coleb/OneDrive/Desktop/Data Analytics Course/Case Study 1_bellabeat fitness tracker/mturkfitbit_export_4.12.16-5.12.16/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv")
+```
+
+### Checking the Data
+
+After importing data, it's important to check the data using the head() or the str() function to determine what the character types are and if they match the information in the type. 
+
+```{r Checking the Data, message=FALSE, warning=FALSE}
+str(Daily_Activity)
+str(Sleep_in_Minutes)
+str(Heartrate_in_seconds)
+str(Hourly_Calories)
+str(Weight_LossLogs)
+str(Hourly_Steps)
+str(Daily_Activity_4.12_5.12)
+```
+
+
+# Processing the Data
+
+### Converting Columns
+From checking the data, I learned that all of the recorded data stored any information related to date-time in the character format. I wanted to change this to date-time to allow me to use time as a variable. The following code does just that: 
+
+```{r processing the data, message=FALSE, warning=FALSE}
+Daily_Activity$ActivityDate <- as.Date(Daily_Activity$ActivityDate, format = "%m/%d/%Y")
+Sleep_in_Minutes$date <- as.POSIXct(Sleep_in_Minutes$date, format ="%m/%d/%Y %I:%M:%S %p", tz = "UTC")
+Heartrate_in_seconds$Time <- as.POSIXct(Heartrate_in_seconds$Time, format = "%m/%d/%Y %I:%M:%S %p", tz = "UTC")
+Hourly_Calories$ActivityHour <- as.POSIXct(Hourly_Calories$ActivityHour, format = "%m/%d/%Y %I:%M:%S %p", tz = "UTC")
+Weight_LossLogs$Date <- as.POSIXct(Weight_LossLogs$Date, format = "%m/%d/%Y %I:%M:%S %p", tz = "UTC")
+Weight_LossLogs$IsManualReport <- as.logical(Weight_LossLogs$IsManualReport)
+Hourly_Steps$ActivityHour <- as.POSIXct(Hourly_Steps$ActivityHour, format = "%m/%d/%Y %I:%M:%S %p", tz = "UTC")
+Daily_Activity_4.12_5.12$ActivityDate <- as.POSIXct(Daily_Activity_4.12_5.12$ActivityDate, format = "%m/%d/%Y %I:%M:%S %p,", tz = "UTC")
+```
+**NOTE** You can see the weight loss column "isManualReport" needed to be converted to boolean as well.
+
+### Combining Datasets and Changing Datasets
+
+Since the data came from two different time spans, 3/12-4/11 and 4/12-5/16, I combined data from both the Daily_Activities data sets to be one set so analysis can cover the full span of 3/12-5/16. I did not combine the other data sets as most of the other datasets contain more than 24,000 points of data, meaning that it is a significant sample size for analysis to be done. 
+
+```{r Combining Datasets}
+combined_Daily_Activity <- bind_rows(Daily_Activity_4.12_5.12, Daily_Activity)
+```
+
+I also had to change the Data from Combined Daily Activity to be in Long format so I can run analysis with activity type as a a class to facet.wrap with.
+```{r Changing Data to Long Format}
+Daily_Activity_Long <- combined_Daily_Activity %>%
+  pivot_longer(
+    cols = c(VeryActiveMinutes, FairlyActiveMinutes, 
+             LightlyActiveMinutes, SedentaryMinutes),
+    names_to = "ActivityType",
+    values_to = "Minutes"
+  )
+```
+
+To finish the processing, I combined hourly calories and hourly steps into one data set with an inner join grouped by activity hour and Id. 
+
+```{r Combining Hourly Calories and Steps, message=FALSE, warning=FALSE}
+Hourly_Calories_and_Steps <- Hourly_Calories %>%
+  group_by(ActivityHour, Id) %>%  # Include Id in grouping
+  summarise(
+    # Aggregate calories
+    Calories = mean(Calories),
+    .groups = "drop"
+  ) %>%
+  inner_join(
+    Hourly_Steps %>%
+      group_by(ActivityHour, Id) %>%
+      summarise(
+        # Aggregate steps
+        StepTotal = mean(StepTotal),
+        .groups = "drop"
+      ),
+    by = c("ActivityHour", "Id")  # Join on both hour and ID
+  )
+```
+
+Now that all the data is prepared and processed, we can get to our analysis (the best part!)
+
+# Analysis
+
+Here's how this is gonna work here. I am first going to insert the code and the graph that corresponds to that code, then we are going to describe the graph afterwards. Sounds good? Alright! Lets get to it. 
+
+### **Total Steps per Day**
+**NOTE** Its important to note that we used the combined data for daily activity, and the activity for days 4/12-5/12 were not recorded so those values were excluded. 
+```{r Bar chart for combined Daily Activity, message=FALSE, warning=FALSE}
+ggplot(data = combined_Daily_Activity) +  
+  geom_col(mapping = aes(x = ActivityDate, y = TotalSteps), fill = "steelblue") +
+  labs(
+    title = "Total Steps per Day",
+    x = "Activity Date", 
+    y = "Total Steps"
+  ) +
+  theme_minimal() +  # Added for cleaner look
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+**Figure 1** Here we have a graph showing Total Steps taken and the date the steps were recorded. As you can see, the recorded steps remained steady with a minimum of 0 until March 28th when we see an increase in steps until April 7 where the maximum steps taken in a day was 36,019 when steps start decreasing again. The average steps taken per day during this time frame were 7,281.
+
+**Analysis** The location where the people who participated in the data is unknown, but I can be reasonably sure that they are located in a place in the northern hemisphere that has noticeable seasons because as Spring comes around in April we see a lot more activity from the participants. This can be important to note so that we can reduce reminders sent to users of Bellabeat products during Spring and increase the notifications during winter as the total steps per day are significantly lower in Winter. 
+
+### **Total Steps compared to Different Activity Minutes for each Activity Level**
+
+```{r Total Steps vs Different Activity Minutes for each Activity Level, message=FALSE, warning=FALSE}
+ggplot(Daily_Activity_Long, aes(x = Minutes, y = TotalSteps, color = ActivityType)) +
+  geom_jitter(size = 3, alpha = 0.175) +
+  geom_smooth(method = "lm", se = TRUE, aes(color = ActivityType)) +
+  stat_cor(method = "pearson", 
+           mapping = aes(x = Minutes, y = TotalSteps,),
+           label.x.npc = "center",  # Position on center of plot
+           label.y.npc = "top",    # Position at top of plot
+           size = 3) + 
+  labs(
+    title = "Total Steps vs Different Activity Minutes for each Activity Level",
+    x = "Activity Minutes",
+    y = "Total Steps",
+    color = "Activity Type"
+  ) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1") + 
+  facet_wrap(~ActivityType)
+```
+
+**Figure 2** Here you can see four different graphs comparing the different activity minutes to the total steps taken for each activity type. The graphs also contain correlation coefficients and p values. The R and P value for Sedentary Minutes are hard to read, but they are R=-0.34, p<2.02e-1. All values are statistically significant
+
+**Analysis** People had the most amount of activity minutes in sedentary minutes, followed by lightly active, then fairly active, then very active. This tracks with our logic as when we are very active, we don't spend much time there as it is very exhaustive. Also, the more time we spend being sedentary, we don't walk as much. 
+
+### **Calories Burned compared to Different Activity Minutes**
+
+```{r Calories vs Different Activity Minutes, message=FALSE, warning=FALSE}
+ggplot(Daily_Activity_Long, aes(x = Minutes, y = Calories, color = ActivityType)) +
+  geom_jitter(size = 3, alpha = 0.2) +
+  geom_smooth(method = "lm", se = TRUE) +
+  stat_cor(method = "pearson", 
+           mapping = aes(x = Minutes, y = Calories, color = ActivityType),
+           label.x.npc = "center",  # Position on center of plot
+           label.y.npc = "bottom",    # Position at bottom of plot
+           size = 3) + 
+  labs(
+    title = "Calories Burned vs Different Activity Minutes",
+    x = "Activity Minutes",
+    y = "Calories",
+    color = "Activity Type"
+  ) +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1") +
+  facet_wrap(~ActivityType)
+```
+**Figure 3** Here you can see the calories burned when compared to the different activity minutes. The R and P value for Sedentary minutes are hard to see but they are R=-0.062, p=0.021. As the type of activity increases in activity level, the amount of calories consumed increases linearly. 
+
+**Analysis** This information tracks well with previous knowledge. As you increase the strenuousness of activity, the amount of calories burned will also increase. Here you can also see that most people spent their time in the sedentary category, which has a negative correlation with calories consumed meaning that the more time people spent sedentary, they burned less calories. I also find it interesting that the largest cluster of sedentary minutes is around 1000 to a max of 1440 minutes. That means that most people in this study spent at least 16 to 24 hours being sedentary! That is way too much. 
+
+### **Calories Burned vs Steps Taken**
+
+```{r Calories burned vs Steps taken}
+ggplot(data = Hourly_Calories_and_Steps) +
+  geom_point(alpha = 0.7, mapping = aes(x=StepTotal, y=Calories,)) +
+  stat_cor(method = "pearson", 
+           mapping = aes(x = StepTotal, y = Calories,),
+           label.x.npc = "center",  # Position on center of plot
+           label.y.npc = "top",    # Position at top of plot
+           size = 3) + 
+  geom_smooth(method = "lm", se = FALSE, 
+              mapping = aes(x=StepTotal, y=Calories)) +
+  labs (
+    title = "Calories Burned vs Steps Taken",
+    x = "Average Calories",
+    y = "Average Steps",
+  ) + 
+  theme_minimal()
+```
+
+**Figure 4** This scatter plot shows how as Average steps increases, the average calories burned increases as well. The graph has a positive linear relationship that is statistically significant. The points range from a min of (0,42) to a max of (10,565,933). 
+
+**Analysis** This plot ties the rest together. This plot has 24,084 observations that align to show that as you increase the amount of steps taken, you increase the calories burned. This means that no matter the level of activity you can still burn calories even if you are not working at a vigorous level. 
+
+# Conclusion
+
+Phew, that was a lot, wasn't it? Well lets test your memory. Remember those guiding questions I mentioned at the beginning? Test yourself to see if you can remember them. If you don't, no worries. I've answered them one by one below for us to go other together.
+
+* **What are some trends in smart device usage?**
+
+We see smart devices being used all the time. They are worn during both when someone is vigorously exercising and when they are sitting down for long periods of time. As time went on in this study we saw more steps being taken per day with April having a much higher count of total steps than March. 
+
+* **How can these trends apply to Bellabeat customers**
+
+Bellabeat customers are women who are caring about their health. These women purchase one of many smart devices that track many of the same conditions as the FitBit that was used for this information. Therefore, it is reasonable to assume that the FitBit data from this set is representative of the population of Bellabeat users.
+
+* **How could these trends help influence Bellabeat marketing strategies?**
+
+Bellabeat should take this information to know that when they detect someone being sedentary for too long, they should send a notification reminding them to take a few steps. We know that it doesn't have to be an vigorous exercise to burn calories, so even a walk around the room can help increase their blood flow and calories burned. This is especially important if someone states that their goal using the program is to lose weight. Having this type of notification will remind them of their goals and how we, as a company, care about their health. 
